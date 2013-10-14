@@ -19,6 +19,7 @@
 
 
 @property NSMutableDictionary* bombs;
+@property NSMutableArray* btn;
 
 @property (assign) IBOutlet NSWindow *window1;
 

@@ -31,6 +31,8 @@
     int dimentionx=5;
     int dimentiony=5;
 
+    _btn=[[NSMutableArray alloc] init];
+    
     _bombs = [[NSMutableDictionary alloc] init];
     
     for (int k=0; k<dimentionx; k++) {
@@ -45,20 +47,21 @@
 
     [[myButton cell] setControlSize:NSSmallControlSize];
     [myButton setTarget:self];
-            int val=(arc4random()%2);
+          
+    int val=(arc4random()%2);
             
-            NSLog(@"k= %d; j= %d",k, j);
+    NSLog(@"k= %d; j= %d",k, j);
            
-            int tg=[[NSString stringWithFormat:@"%d%d",k,j] integerValue];
+    int tg=[[NSString stringWithFormat:@"%d%d",k,j] integerValue];
             
-            [myButton setTag:tg];
+    [myButton setTag:tg];
 
-            NSLog(@"TAG=%d",tg);
+    NSLog(@"TAG=%d",tg);
     [myButton setIntValue:0];
     [myButton setAction:@selector(buttonPressed:)];
 
-            //[_arr replaceObjectAtIndex:(k*dimentiony+j) withObject:[NSNumber numberWithInt:val]];
             [_bombs setObject:[NSNumber numberWithInt:val] forKey:[NSNumber numberWithInt:tg]];
+            [_btn addObject:myButton];
             
     [[self.window1 contentView] addSubview: myButton];
 
@@ -79,17 +82,22 @@
 
     NSLog(@"FUNCTION=%d",a);
     
-    int nei[4]={-10,-1,1,10};
+    int b=0;
+    NSArray *nei=[NSArray arrayWithObjects:[NSNumber numberWithInt:-10], [NSNumber numberWithInt:-1], [NSNumber numberWithInt:1], [NSNumber numberWithInt:10],[NSNumber numberWithInt:-11],[NSNumber numberWithInt:11],[NSNumber numberWithInt:-9],[NSNumber numberWithInt:9], nil];
 
     
-   /* for (id count in nei){
+    for (NSNumber *count in nei){
         
-        if ([_arr objectForKey:[NSNumber numberWithInt:(a+(count integerValue))]]) {
+        if ([_bombs objectForKey:[NSNumber numberWithInt:(a+[count integerValue])]]) {
         
-            NSLog(@"Ok");
+            b+=[[_bombs objectForKey:[NSNumber numberWithInt:(a+[count integerValue])]] integerValue];
+            
+            
+            
+            NSLog(@"%d",b);
         }
-    }*/
-    return a;
+    }
+    return b;
 }
 
 -(void)buttonPressed:(id)sender {
@@ -98,11 +106,15 @@
     [label setIntValue:[sender tag]];
     [sender setIntValue:1];
     
-    int somekey=[[_bombs objectForKey:[NSNumber numberWithInt:[sender tag]]] integerValue];
+    //int somekey=[[_bombs objectForKey:[NSNumber numberWithInt:[sender tag]]] integerValue];
+//    int bombs=;
     
-    [self CountEight:[sender tag]];
+    [sender setTitle:[[NSNumber numberWithInt:[self CountEight:[sender tag]]] stringValue]];
     
-    [sender setTitle:[_bombs objectForKey:[NSNumber numberWithInt:[sender tag]]]];
+//??????    [_btn getObject:[_bombs[3]]];
+    
+    [label setIntValue:[[_bombs objectForKey:[NSNumber numberWithInt:[sender tag]]] integerValue]];
+    
 }
 
 
