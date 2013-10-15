@@ -60,8 +60,8 @@
     [myButton setIntValue:0];
     [myButton setAction:@selector(buttonPressed:)];
 
-            [_bombs setObject:[NSNumber numberWithInt:val] forKey:[NSNumber numberWithInt:tg]];
-            [_btn addObject:myButton];
+            [_bombs setObject:[NSNumber numberWithInt:val] forKey:[NSNumber numberWithInt:tg]]; // dic of "0"s&"1"s for keys as 11 12 40...
+            [_btn addObject:myButton];              // array of pointers to buttons
             
     [[self.window1 contentView] addSubview: myButton];
 
@@ -83,6 +83,8 @@
     NSLog(@"FUNCTION=%d",a);
     
     int b=0;
+    int temp=0;
+    
     NSArray *nei=[NSArray arrayWithObjects:[NSNumber numberWithInt:-10], [NSNumber numberWithInt:-1], [NSNumber numberWithInt:1], [NSNumber numberWithInt:10],[NSNumber numberWithInt:-11],[NSNumber numberWithInt:11],[NSNumber numberWithInt:-9],[NSNumber numberWithInt:9], nil];
 
     
@@ -90,33 +92,62 @@
         
         if ([_bombs objectForKey:[NSNumber numberWithInt:(a+[count integerValue])]]) {
         
-            b+=[[_bombs objectForKey:[NSNumber numberWithInt:(a+[count integerValue])]] integerValue];
+            temp=[[_bombs objectForKey:[NSNumber numberWithInt:(a+[count integerValue])]] integerValue];
+         /*   if (temp == 0)
+            {
+                
+                [self CountEight:([NSNumber numberWithInt:(a+[count integerValue])])];
+            }*/
+            b+=temp;
             
-            
-            
-            NSLog(@"%d",b);
         }
     }
+           NSLog(@"Here is %d mines around...",b);
     return b;
 }
 
+/*
+-(void)setValuesForButtons:(NSDictionary *)
+
+for (NSButton* a in _btn) {
+    NSLog(@"%i",[a tag]);
+    //        [label setIntValue:[a tag]];
+    if ([a tag]==30) {
+        [a setTitle:@"X"];
+        
+    }
+    
+}
+ 
+ */
 -(void)buttonPressed:(id)sender {
 
 
-    [label setIntValue:[sender tag]];
+   // [label setIntValue:[sender tag]];
     [sender setIntValue:1];
     
     //int somekey=[[_bombs objectForKey:[NSNumber numberWithInt:[sender tag]]] integerValue];
-//    int bombs=;
+    int bombs=0;
+    if ([[_bombs objectForKey:[NSNumber numberWithInt:([sender tag])]] integerValue]==1)
+    {
+        [sender setTitle:@"X"];
+        [label setStringValue:@"Game over"];
+        
+        // ... open all other fields
     
-    [sender setTitle:[[NSNumber numberWithInt:[self CountEight:[sender tag]]] stringValue]];
-    
-//??????    [_btn getObject:[_bombs[3]]];
+    } else //if ([[NSNumber numberWithInt:([sender tag])] integerValue]==0)
+    {
+        [sender setTitle:@""];
+        bombs=[self CountEight:([[NSNumber numberWithInt:([sender tag])] integerValue])];
+        if (bombs!=0)
+        {
+            [sender setTitle:[NSString stringWithFormat:@"%i",bombs]];
+        }
+    }
     
     [label setIntValue:[[_bombs objectForKey:[NSNumber numberWithInt:[sender tag]]] integerValue]];
     
 }
-
 
 
 @end
