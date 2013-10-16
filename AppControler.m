@@ -153,9 +153,12 @@
 - (void)mouseDown:(NSEvent *)theEvent {
     
     NSUInteger pressedButtonMask = [NSEvent pressedMouseButtons];
-    //BOOL leftMouseDown = ((pressedButtonMask & (1 << 0))) != 0;
+    BOOL leftMouseDown = ((pressedButtonMask & (1 << 0))) != 0;
     BOOL rightMouseDown = ((pressedButtonMask & (1 << 1))) != 0;
+    //BOOL otherMouseDown = ((pressedButtonMask & (1 << 1))) != 0;
+    if (leftMouseDown) { NSLog(@"left"); }
     if (rightMouseDown) { NSLog(@"right"); }
+   // NSResp
 }
      
 
