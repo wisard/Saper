@@ -150,9 +150,10 @@
     NSLog(@"%i,%d",ind,ind);
     ind++;
     
-    NSInteger check=[[zer objectAtIndex:ind] integerValue];
+    //NSInteger check=[zer indexOfObject:[zer objectAtIndex:ind]];
                      
-    if(check != NSNotFound) {
+    //if(check != nil) {
+    if(ind<[zer count]){
         
         [self CountEight:ind:zer];
         
@@ -187,7 +188,7 @@
         
         //bombs=
         [zeros addObject:[NSNumber numberWithInt:([sender tag])]];
-        
+        //[zeros addObject:nil];
         [self CountEight:0:zeros];
         
       /*  if (bombs!=0)
