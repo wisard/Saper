@@ -24,6 +24,7 @@
 @property (assign) IBOutlet NSWindow *window1;
 
 - (IBAction)butClick:(id)sender;
-- (int)CountEight:(int)a;
+- (void)CountEight:(int)a;
+- (NSButton*)getButtonByIndex:(int)index;
 
 @end

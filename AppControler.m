@@ -12,6 +12,7 @@
 
 @implementation AppControler
 
+
 - (void)awakeFromNib {
     [label setFont:[NSFont fontWithName:@"Courier" size:15]];
     [label setTextColor:[NSColor redColor]];
@@ -60,8 +61,10 @@
     [myButton setIntValue:0];
     [myButton setAction:@selector(buttonPressed:)];
 
-            [_bombs setObject:[NSNumber numberWithInt:val] forKey:[NSNumber numberWithInt:tg]]; // dic of "0"s&"1"s for keys as 11 12 40...
-            [_btn addObject:myButton];              // array of pointers to buttons
+            [_bombs setObject:[NSNumber numberWithInt:val] forKey:[NSNumber numberWithInt:tg]];
+            // dictionary of "0"s&"1"s for keys as 11 12 40...
+            [_btn addObject:myButton];
+            // array of pointers to buttons
             
     [[self.window1 contentView] addSubview: myButton];
 
@@ -78,48 +81,87 @@
     
 }
 
--(int)CountEight:(int)a{
 
-    NSLog(@"FUNCTION=%d",a);
+
+-(NSButton*)getButtonByIndex:(int)index{
+    
+    for (NSButton* a in _btn) {
+        
+        if ([a tag]==index) {
+            // int count=[self CountEight:([NSNumber numberWithInt:(index)])];
+            //  [a setTitle:[NSString stringWithFormat:@"%i",count]];
+            return a;
+        }
+        
+    }
+    
+    // remove it !
+    return _btn[0];
+}
+
+-(int)getMinsByIndex:(int)xy{
+
+    return [[_bombs objectForKey:[NSNumber numberWithInt:xy]] integerValue];
+    
+}
+
+-(void)CountEight:(int)ind:(NSMutableArray*)zer
+{
+
+    int a=[[zer objectAtIndex:ind] integerValue];
+    
+    NSLog(@"FUNCTION=%i",a);
     
     int b=0;
-    int temp=0;
     
     NSArray *nei=[NSArray arrayWithObjects:[NSNumber numberWithInt:-10], [NSNumber numberWithInt:-1], [NSNumber numberWithInt:1], [NSNumber numberWithInt:10],[NSNumber numberWithInt:-11],[NSNumber numberWithInt:11],[NSNumber numberWithInt:-9],[NSNumber numberWithInt:9], nil];
-
+    
     
     for (NSNumber *count in nei){
         
         if ([_bombs objectForKey:[NSNumber numberWithInt:(a+[count integerValue])]]) {
         
-            temp=[[_bombs objectForKey:[NSNumber numberWithInt:(a+[count integerValue])]] integerValue];
-         /*   if (temp == 0)
-            {
-                
-                [self CountEight:([NSNumber numberWithInt:(a+[count integerValue])])];
-            }*/
+            // checking bomb in neighbourhood : 1 or 0;
+            
+            int temp=[[_bombs objectForKey:[NSNumber numberWithInt:(a+[count integerValue])]] integerValue];
+            
             b+=temp;
             
+            if ((temp == 0) && (![zer containsObject:[NSNumber numberWithInt:(a+[count integerValue])]]))
+            {
+                
+                [zer addObject:[NSNumber numberWithInt:(a+[count integerValue])]];
+                
+             //   [self setValuesForButtons:(a+[count integerValue])]; // --not bad
+              //  [self CountEight:([NSNumber numberWithInt:(a+[count integerValue])])];
+            }
+            
+            //for (NSButton* butt in _btn) {
+               
+            [[self getButtonByIndex:a] setIntValue:1];
+            [[self getButtonByIndex:a] setTitle:[NSString stringWithFormat:@"%i",b]];
+            
+
+            
         }
-    }
            NSLog(@"Here is %d mines around...",b);
-    return b;
-}
-
-/*
--(void)setValuesForButtons:(NSDictionary *)
-
-for (NSButton* a in _btn) {
-    NSLog(@"%i",[a tag]);
-    //        [label setIntValue:[a tag]];
-    if ([a tag]==30) {
-        [a setTitle:@"X"];
         
     }
+    NSLog(@"%i,%d",ind,ind);
+    ind++;
+    
+    NSInteger check=[[zer objectAtIndex:ind] integerValue];
+                     
+    if(check != NSNotFound) {
+        
+        [self CountEight:ind:zer];
+        
+    }
+    else NSLog(@"Finaly!");
     
 }
- 
- */
+
+
 -(void)buttonPressed:(id)sender {
 
 
@@ -128,24 +170,39 @@ for (NSButton* a in _btn) {
     
     //int somekey=[[_bombs objectForKey:[NSNumber numberWithInt:[sender tag]]] integerValue];
     int bombs=0;
-    if ([[_bombs objectForKey:[NSNumber numberWithInt:([sender tag])]] integerValue]==1)
+    
+    NSMutableArray *zeros=[[NSMutableArray alloc]init];
+    int ind=0;
+    
+    
+    if ([self getMinsByIndex:[sender tag]]==1)
     {
         [sender setTitle:@"X"];
         [label setStringValue:@"Game over"];
         
-        // ... open all other fields
+        // ... to open all other fields
     
-    } else //if ([[NSNumber numberWithInt:([sender tag])] integerValue]==0)
+    } else // cell is NOT a BOMB
     {
-        [sender setTitle:@""];
-        bombs=[self CountEight:([[NSNumber numberWithInt:([sender tag])] integerValue])];
-        if (bombs!=0)
+        
+        //bombs=
+        [zeros addObject:[NSNumber numberWithInt:([sender tag])]];
+        
+        [self CountEight:0:zeros];
+        
+      /*  if (bombs!=0)
         {
             [sender setTitle:[NSString stringWithFormat:@"%i",bombs]];
-        }
+        } else //if (bombs==0)
+        {
+            [sender setTitle:@""];
+       
+         //   [self setValuesForButtons:([count integerValue])];
+       
+        } */
     }
     
-    [label setIntValue:[[_bombs objectForKey:[NSNumber numberWithInt:[sender tag]]] integerValue]];
+  //  [label setIntValue:[[_bombs objectForKey:[NSNumber numberWithInt:[sender tag]]] integerValue]];
     
 }
 
