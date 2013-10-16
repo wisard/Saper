@@ -82,19 +82,15 @@
 }
 
 
-
 -(NSButton*)getButtonByIndex:(int)index{
     
     for (NSButton* a in _btn) {
         
         if ([a tag]==index) {
-            // int count=[self CountEight:([NSNumber numberWithInt:(index)])];
-            //  [a setTitle:[NSString stringWithFormat:@"%i",count]];
             return a;
         }
         
     }
-    
     // remove it !
     return _btn[0];
 }
@@ -121,7 +117,7 @@
         
         if ([_bombs objectForKey:[NSNumber numberWithInt:(a+[count integerValue])]]) {
         
-            // checking bomb in neighbourhood : 1 or 0;
+            // checking bombs in neighbourhood : 1 or 0;
             
             int temp=[[_bombs objectForKey:[NSNumber numberWithInt:(a+[count integerValue])]] integerValue];
             
@@ -129,14 +125,8 @@
             
             if ((temp == 0) && (![zer containsObject:[NSNumber numberWithInt:(a+[count integerValue])]]))
             {
-                
                 [zer addObject:[NSNumber numberWithInt:(a+[count integerValue])]];
-                
-             //   [self setValuesForButtons:(a+[count integerValue])]; // --not bad
-              //  [self CountEight:([NSNumber numberWithInt:(a+[count integerValue])])];
             }
-            
-            //for (NSButton* butt in _btn) {
                
             [[self getButtonByIndex:a] setIntValue:1];
             [[self getButtonByIndex:a] setTitle:[NSString stringWithFormat:@"%i",b]];
@@ -144,66 +134,61 @@
 
             
         }
-           NSLog(@"Here is %d mines around...",b);
+          // NSLog(@"Here is %d mines around...",temp);
         
     }
-    NSLog(@"%i,%d",ind,ind);
+
     ind++;
     
-    //NSInteger check=[zer indexOfObject:[zer objectAtIndex:ind]];
-                     
-    //if(check != nil) {
-    if(ind<[zer count]){
+    if(ind<[zer count]) {
         
         [self CountEight:ind:zer];
-        
+    
     }
-    else NSLog(@"Finaly!");
+    
+    else NSLog(@"Recursion completed");
     
 }
 
+- (void)mouseDown:(NSEvent *)theEvent {
+    
+    NSUInteger pressedButtonMask = [NSEvent pressedMouseButtons];
+    //BOOL leftMouseDown = ((pressedButtonMask & (1 << 0))) != 0;
+    BOOL rightMouseDown = ((pressedButtonMask & (1 << 1))) != 0;
+    if (rightMouseDown) { NSLog(@"right"); }
+}
+     
 
 -(void)buttonPressed:(id)sender {
 
-
-   // [label setIntValue:[sender tag]];
     [sender setIntValue:1];
     
-    //int somekey=[[_bombs objectForKey:[NSNumber numberWithInt:[sender tag]]] integerValue];
     int bombs=0;
-    
-    NSMutableArray *zeros=[[NSMutableArray alloc]init];
     int ind=0;
     
+    NSMutableArray *zeros=[[NSMutableArray alloc]init];
     
     if ([self getMinsByIndex:[sender tag]]==1)
     {
+
+        for (NSButton* mybutton in _btn) {
+            [mybutton setIntValue:1];
+            [mybutton setTitle:[NSString stringWithFormat:@"%i",[self getMinsByIndex:[mybutton tag]]]];
+
+            
+        }
+        
         [sender setTitle:@"X"];
         [label setStringValue:@"Game over"];
         
-        // ... to open all other fields
-    
+        NSLog(@"Game over");
     } else // cell is NOT a BOMB
     {
         
-        //bombs=
         [zeros addObject:[NSNumber numberWithInt:([sender tag])]];
-        //[zeros addObject:nil];
         [self CountEight:0:zeros];
         
-      /*  if (bombs!=0)
-        {
-            [sender setTitle:[NSString stringWithFormat:@"%i",bombs]];
-        } else //if (bombs==0)
-        {
-            [sender setTitle:@""];
-       
-         //   [self setValuesForButtons:([count integerValue])];
-       
-        } */
     }
-    
-  //  [label setIntValue:[[_bombs objectForKey:[NSNumber numberWithInt:[sender tag]]] integerValue]];
     
 }
 

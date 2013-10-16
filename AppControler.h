@@ -26,5 +26,6 @@
 - (IBAction)butClick:(id)sender;
 - (void)CountEight:(int)a;
 - (NSButton*)getButtonByIndex:(int)index;
+- (void)mouseDown:(NSEvent *)theEvent;
 
 @end
