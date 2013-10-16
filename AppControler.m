@@ -23,14 +23,14 @@
     
     // Insert code here to initialize your application
 
-    int x = 200; //possition x
-    int y = 80; //possition y
+    int x = 180; //possition x
+    int y = 70; //possition y
     
     int width = 20;
     int height = 22;
     
-    int dimentionx=5;
-    int dimentiony=5;
+    int dimentionx=9;
+    int dimentiony=9;
 
     _btn=[[NSMutableArray alloc] init];
     
@@ -77,7 +77,7 @@
 - (IBAction)butClick:(id)sender{
 
     [label setStringValue:@"Starting new game!"];
-    
+    [self awakeFromNib];
     
 }
 
