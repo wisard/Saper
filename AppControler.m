@@ -18,7 +18,7 @@
     [label setTextColor:[NSColor redColor]];
     [label setSelectable:YES];
    
-    
+    flag=FALSE;
     //====
     
     // Insert code here to initialize your application
@@ -32,9 +32,9 @@
     int dimentionx=9;
     int dimentiony=9;
 
-    _btn=[[NSMutableArray alloc] init];
+    btn=[[NSMutableArray alloc] init];
     
-    _bombs = [[NSMutableDictionary alloc] init];
+    bombs = [[NSMutableDictionary alloc] init];
     
     for (int k=0; k<dimentionx; k++) {
         for(int j=0; j<dimentiony;j++){
@@ -61,9 +61,9 @@
     [myButton setIntValue:0];
     [myButton setAction:@selector(buttonPressed:)];
 
-            [_bombs setObject:[NSNumber numberWithInt:val] forKey:[NSNumber numberWithInt:tg]];
+            [bombs setObject:[NSNumber numberWithInt:val] forKey:[NSNumber numberWithInt:tg]];
             // dictionary of "0"s&"1"s for keys as 11 12 40...
-            [_btn addObject:myButton];
+            [btn addObject:myButton];
             // array of pointers to buttons
             
     [[self.window1 contentView] addSubview: myButton];
@@ -74,6 +74,11 @@
 }
 
 
+- (IBAction)setFlagged:(id)sender {
+    
+    flag=TRUE;
+}
+
 - (IBAction)butClick:(id)sender{
 
     [label setStringValue:@"Starting new game!"];
@@ -81,10 +86,9 @@
     
 }
 
-
 -(NSButton*)getButtonByIndex:(int)index{
     
-    for (NSButton* a in _btn) {
+    for (NSButton* a in btn) {
         
         if ([a tag]==index) {
             return a;
@@ -92,12 +96,12 @@
         
     }
     // remove it !
-    return _btn[0];
+    return btn[0];
 }
 
 -(int)getMinsByIndex:(int)xy{
 
-    return [[_bombs objectForKey:[NSNumber numberWithInt:xy]] integerValue];
+    return [[bombs objectForKey:[NSNumber numberWithInt:xy]] integerValue];
     
 }
 
@@ -115,11 +119,11 @@
     
     for (NSNumber *count in nei){
         
-        if ([_bombs objectForKey:[NSNumber numberWithInt:(a+[count integerValue])]]) {
+        if ([bombs objectForKey:[NSNumber numberWithInt:(a+[count integerValue])]]) {
         
             // checking bombs in neighbourhood : 1 or 0;
             
-            int temp=[[_bombs objectForKey:[NSNumber numberWithInt:(a+[count integerValue])]] integerValue];
+            int temp=[[bombs objectForKey:[NSNumber numberWithInt:(a+[count integerValue])]] integerValue];
             
             b+=temp;
             
@@ -155,12 +159,11 @@
     NSUInteger pressedButtonMask = [NSEvent pressedMouseButtons];
     BOOL leftMouseDown = ((pressedButtonMask & (1 << 0))) != 0;
     BOOL rightMouseDown = ((pressedButtonMask & (1 << 1))) != 0;
-    //BOOL otherMouseDown = ((pressedButtonMask & (1 << 1))) != 0;
     if (leftMouseDown) { NSLog(@"left"); }
     if (rightMouseDown) { NSLog(@"right"); }
    // NSResp
 }
-     
+
 
 -(void)buttonPressed:(id)sender {
 
@@ -171,10 +174,12 @@
     
     NSMutableArray *zeros=[[NSMutableArray alloc]init];
     
-    if ([self getMinsByIndex:[sender tag]]==1)
+    if (flag) {[sender setTitle:@"X"]; flag=FALSE;}
+    
+    else if ([self getMinsByIndex:[sender tag]]==1)
     {
 
-        for (NSButton* mybutton in _btn) {
+        for (NSButton* mybutton in btn) {
             [mybutton setIntValue:1];
             [mybutton setTitle:[NSString stringWithFormat:@"%i",[self getMinsByIndex:[mybutton tag]]]];
 

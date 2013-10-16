@@ -13,16 +13,17 @@
     
 @private
     IBOutlet NSTextField* label;
-   
+    NSMutableDictionary* bombs;
+    NSMutableArray* btn;
+    bool flag;
     
-}
+};
 
 
-@property NSMutableDictionary* bombs;
-@property NSMutableArray* btn;
 
 @property (assign) IBOutlet NSWindow *window1;
 
+- (IBAction)setFlagged:(id)sender;
 - (IBAction)butClick:(id)sender;
 - (void)CountEight:(int)ind:(NSMutableArray*)zer;
 - (NSButton*)getButtonByIndex:(int)index;
