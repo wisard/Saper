@@ -213,27 +213,27 @@
     {
 
         for (NSButton* mybutton in btn) {
-      //      [mybutton setIntValue:1];
+            [mybutton setIntValue:1];
             [mybutton setTitle:[NSString stringWithFormat:@"%i",[self getMinsByIndex:[mybutton tag]]]];
 //            NSLog(@"%i",[NSNumber numberWithInt:[[mybutton g ]]);
-              NSLog(@"IntValue=%i",[mybutton intValue]);
+            [mybutton setEnabled:NO];
         }
         
         [sender setTitle:@"X"];
         [label setStringValue:@"Game over"];
         
         NSLog(@"Game over");
+        
     } else // cell is NOT a BOMB
     {
         
         [zeros addObject:[NSNumber numberWithInt:([sender tag])]];
         [self CountEight:0:zeros:iteration];
         
-    }
-    
-    if([self isEnd]) {
-        [label setStringValue:@"Congrats!!!"];
-         
+        if([self isEnd]) {
+            [label setStringValue:@"Congrats!!!"];
+            
+        }
     }
     
 }
