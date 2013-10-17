@@ -76,7 +76,15 @@
 
 - (IBAction)setFlagged:(id)sender {
     
-    flag=TRUE;
+    if(flag==FALSE){
+        flag=true;
+        [sender setTitle:@"Unflag"];
+    }
+    else
+    {
+        flag=false;
+        [sender setTitle:@"Flag"];
+    }
 }
 
 - (IBAction)butClick:(id)sender{
@@ -169,21 +177,21 @@
 
     [sender setIntValue:1];
     
-    int bombs=0;
-    int ind=0;
-    
     NSMutableArray *zeros=[[NSMutableArray alloc]init];
     
-    if (flag) {[sender setTitle:@"X"]; flag=FALSE;}
-    
+    if (flag) {
+        
+        [sender setTitle:@"X"];
+        
+    }
     else if ([self getMinsByIndex:[sender tag]]==1)
     {
 
         for (NSButton* mybutton in btn) {
-            [mybutton setIntValue:1];
+      //      [mybutton setIntValue:1];
             [mybutton setTitle:[NSString stringWithFormat:@"%i",[self getMinsByIndex:[mybutton tag]]]];
-
-            
+//            NSLog(@"%i",[NSNumber numberWithInt:[[mybutton g ]]);
+              NSLog(@"IntValue=%i",[mybutton intValue]);
         }
         
         [sender setTitle:@"X"];
