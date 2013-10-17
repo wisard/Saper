@@ -16,7 +16,8 @@
     NSMutableDictionary* bombs;
     NSMutableArray* btn;
     bool flag;
-    
+    IBOutlet NSTextField* counter;
+    int bombs_amount;
 };
 
 

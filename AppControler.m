@@ -27,11 +27,13 @@
     int y = 70; //possition y
     
     int width = 20;
-    int height = 22;
+    int height = 20;
     
     int dimentionx=9;
     int dimentiony=9;
-
+    
+    bombs_amount=0;
+    
     btn=[[NSMutableArray alloc] init];
     
     bombs = [[NSMutableDictionary alloc] init];
@@ -39,7 +41,7 @@
     for (int k=0; k<dimentionx; k++) {
         for(int j=0; j<dimentiony;j++){
          
-    NSButton *myButton = [[NSButton alloc] initWithFrame:NSMakeRect(x+k*19, y+j*18, width, height)];
+    NSButton *myButton = [[NSButton alloc] initWithFrame:NSMakeRect(x+k*19, y+j*17, width, height)];
     
     [myButton setTitle: @""];
     
@@ -47,9 +49,15 @@
     [myButton setBezelStyle:NSSmallSquareBezelStyle]; //Set what style You want
 
     [[myButton cell] setControlSize:NSSmallControlSize];
+
+//            [myButton setTextColor:[CIColor ] forState: ];
+            
     [myButton setTarget:self];
           
+
     int val=(arc4random()%2);
+            
+            if(val>0) bombs_amount++;
             
     NSLog(@"k= %d; j= %d",k, j);
            
@@ -69,8 +77,8 @@
     [[self.window1 contentView] addSubview: myButton];
 
         }
-        
     }
+    [counter setIntValue:bombs_amount];
 }
 
 
@@ -90,6 +98,7 @@
 - (IBAction)butClick:(id)sender{
 
     [label setStringValue:@"Starting new game!"];
+  //  count=0;
     [self awakeFromNib];
     
 }
@@ -107,16 +116,25 @@
     return btn[0];
 }
 
+-(BOOL)isEnd{
+
+    for(NSButton* but in btn){
+        if([but intValue]<1) return false;
+    }
+    return  true;
+}
+
+
 -(int)getMinsByIndex:(int)xy{
 
     return [[bombs objectForKey:[NSNumber numberWithInt:xy]] integerValue];
     
 }
 
--(void)CountEight:(int)ind:(NSMutableArray*)zer
+-(void)CountEight:(int)bomb_ind:(NSMutableArray*)zer:(int)iteration
 {
-
-    int a=[[zer objectAtIndex:ind] integerValue];
+    
+    int a=[[zer objectAtIndex:bomb_ind] integerValue];
     
     NSLog(@"FUNCTION=%i",a);
     
@@ -128,7 +146,7 @@
     for (NSNumber *count in nei){
         
         if ([bombs objectForKey:[NSNumber numberWithInt:(a+[count integerValue])]]) {
-        
+            
             // checking bombs in neighbourhood : 1 or 0;
             
             int temp=[[bombs objectForKey:[NSNumber numberWithInt:(a+[count integerValue])]] integerValue];
@@ -139,28 +157,25 @@
             {
                 [zer addObject:[NSNumber numberWithInt:(a+[count integerValue])]];
             }
-               
+            
             [[self getButtonByIndex:a] setIntValue:1];
+            [[self getButtonByIndex:a] setEnabled:NO];
             [[self getButtonByIndex:a] setTitle:[NSString stringWithFormat:@"%i",b]];
             
-
-            
         }
-          // NSLog(@"Here is %d mines around...",temp);
-        
-    }
-
-    ind++;
-    
-    if(ind<[zer count]) {
-        
-        [self CountEight:ind:zer];
-    
     }
     
+    bomb_ind++;
+    
+    if((bomb_ind<[zer count]) && (iteration > 0))
+    {
+        iteration--;
+        [self CountEight:bomb_ind:zer:iteration];
+    }
     else NSLog(@"Recursion completed");
     
 }
+
 
 - (void)mouseDown:(NSEvent *)theEvent {
     
@@ -173,16 +188,26 @@
 }
 
 
+
 -(void)buttonPressed:(id)sender {
 
     [sender setIntValue:1];
-    
+    int iteration=4;
     NSMutableArray *zeros=[[NSMutableArray alloc]init];
+    NSLog(@"%i",bombs_amount);
     
     if (flag) {
         
-        [sender setTitle:@"X"];
-        
+        if([[sender title] isEqualToString:@"X"])
+        {
+            [counter setIntValue:bombs_amount++];
+            
+        }
+        else
+        {
+            [counter setIntValue:bombs_amount--];
+            [sender setTitle:@"X"];
+        }
     }
     else if ([self getMinsByIndex:[sender tag]]==1)
     {
@@ -202,11 +227,15 @@
     {
         
         [zeros addObject:[NSNumber numberWithInt:([sender tag])]];
-        [self CountEight:0:zeros];
+        [self CountEight:0:zeros:iteration];
         
     }
     
+    if([self isEnd]) {
+        [label setStringValue:@"Congrats!!!"];
+         
+    }
+    
 }
-
-
+    
 @end
