@@ -687,11 +687,21 @@
                             </connections>
                         </buttonCell>
                     </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ags-5p-LoQ">
+                        <rect key="frame" x="442" y="244" width="54" height="27"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" borderStyle="bezel" title="0000" id="LoD-5c-sb5">
+                            <font key="font" size="18" name="LucidaGrande"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
         </window>
         <customObject id="aml-uI-CNy" customClass="AppControler">
             <connections>
+                <outlet property="counter" destination="ags-5p-LoQ" id="iqe-fd-1iA"/>
                 <outlet property="label" destination="FIT-hY-rpr" id="deB-Gb-2GW"/>
                 <outlet property="window" destination="371" id="aDU-Sn-pxk"/>
                 <outlet property="window1" destination="371" id="kg9-nr-9ln"/>
