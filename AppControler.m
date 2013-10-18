@@ -17,11 +17,6 @@
     [label setFont:[NSFont fontWithName:@"Courier" size:15]];
     [label setTextColor:[NSColor redColor]];
     [label setSelectable:YES];
-   
-    flag=FALSE;
-    //====
-    
-    // Insert code here to initialize your application
 
     int x = 180; //possition x
     int y = 70; //possition y
@@ -98,7 +93,6 @@
 - (IBAction)butClick:(id)sender{
 
     [label setStringValue:@"Starting new game!"];
-  //  count=0;
     [self awakeFromNib];
     
 }
@@ -118,6 +112,8 @@
 
 -(BOOL)isEnd{
 
+    // add bombs check..
+    
     for(NSButton* but in btn){
         if([but intValue]<1) return false;
     }
@@ -147,6 +143,12 @@
         
         if ([bombs objectForKey:[NSNumber numberWithInt:(a+[count integerValue])]]) {
             
+            NSButton* butt=[self getButtonByIndex:[NSNumber numberWithInt:(a+[count integerValue])]];
+            
+            NSLog(@"String is=%@",[butt title]);
+            
+            if ([[[self getButtonByIndex:[NSNumber numberWithInt:(a+[count integerValue])]] title] isEqualToString:@""]) {
+                
             // checking bombs in neighbourhood : 1 or 0;
             
             int temp=[[bombs objectForKey:[NSNumber numberWithInt:(a+[count integerValue])]] integerValue];
@@ -161,7 +163,7 @@
             [[self getButtonByIndex:a] setIntValue:1];
             [[self getButtonByIndex:a] setEnabled:NO];
             [[self getButtonByIndex:a] setTitle:[NSString stringWithFormat:@"%i",b]];
-            
+        }
         }
     }
     
@@ -191,32 +193,39 @@
 
 -(void)buttonPressed:(id)sender {
 
-    [sender setIntValue:1];
-    int iteration=4;
+   // [sender setIntValue:1];
+    int iteration=100;
     NSMutableArray *zeros=[[NSMutableArray alloc]init];
     NSLog(@"%i",bombs_amount);
-    
-    if (flag) {
+    NSLog(@"%@",[sender title]);
+    if (flag){
         
-        if([[sender title] isEqualToString:@"X"])
-        {
-            [counter setIntValue:bombs_amount++];
-            
+        if([[sender title] isEqualToString:@""]) {
+        
+        bombs_amount--;
+        [counter setIntValue:bombs_amount];
+        [sender setTitle:@"X"];
         }
-        else
-        {
-            [counter setIntValue:bombs_amount--];
-            [sender setTitle:@"X"];
+        
+        [sender setIntValue:1];
+        
+        if([self isEnd]) {
+            [label setStringValue:@"Congrats!!!"];
+            
         }
     }
     else if ([self getMinsByIndex:[sender tag]]==1)
     {
-
+        if([[sender title] isEqualToString:@"X"])
+        {
+            bombs_amount++;
+            [counter setIntValue:bombs_amount];
+            
+        }
         for (NSButton* mybutton in btn) {
-            [mybutton setIntValue:1];
             [mybutton setTitle:[NSString stringWithFormat:@"%i",[self getMinsByIndex:[mybutton tag]]]];
-//            NSLog(@"%i",[NSNumber numberWithInt:[[mybutton g ]]);
             [mybutton setEnabled:NO];
+            [mybutton setIntValue:1];
         }
         
         [sender setTitle:@"X"];
@@ -226,7 +235,12 @@
         
     } else // cell is NOT a BOMB
     {
-        
+        if([[sender title] isEqualToString:@"X"])
+        {
+            bombs_amount++;
+            [counter setIntValue:bombs_amount];
+            
+        }
         [zeros addObject:[NSNumber numberWithInt:([sender tag])]];
         [self CountEight:0:zeros:iteration];
         
