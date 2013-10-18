@@ -18,6 +18,7 @@
     bool flag;
     IBOutlet NSTextField* counter;
     int bombs_amount;
+    int cleared;
 };
 
 

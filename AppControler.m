@@ -28,6 +28,7 @@
     int dimentiony=9;
     
     bombs_amount=0;
+    cleared=0;
     
     btn=[[NSMutableArray alloc] init];
     
@@ -74,12 +75,13 @@
         }
     }
     [counter setIntValue:bombs_amount];
+    cleared=bombs_amount;
 }
 
 
 - (IBAction)setFlagged:(id)sender {
     
-    if(flag==FALSE){
+    if(!flag){
         flag=true;
         [sender setTitle:@"Unflag"];
     }
@@ -113,11 +115,12 @@
 -(BOOL)isEnd{
 
     // add bombs check..
+        for(NSButton* but in btn){
+            if([but intValue]<1) return false;
+        }
     
-    for(NSButton* but in btn){
-        if([but intValue]<1) return false;
-    }
-    return  true;
+    if (cleared==0) return  true;
+    else return false;
 }
 
 
@@ -147,7 +150,7 @@
             
             NSLog(@"String is=%@",[butt title]);
             
-            if ([[[self getButtonByIndex:[NSNumber numberWithInt:(a+[count integerValue])]] title] isEqualToString:@""]) {
+            //if ([[[self getButtonByIndex:[NSNumber numberWithInt:(a+[count integerValue])]] title] isEqualToString:@""]) {
                 
             // checking bombs in neighbourhood : 1 or 0;
             
@@ -163,7 +166,7 @@
             [[self getButtonByIndex:a] setIntValue:1];
             [[self getButtonByIndex:a] setEnabled:NO];
             [[self getButtonByIndex:a] setTitle:[NSString stringWithFormat:@"%i",b]];
-        }
+      //  }
         }
     }
     
@@ -198,6 +201,7 @@
     NSMutableArray *zeros=[[NSMutableArray alloc]init];
     NSLog(@"%i",bombs_amount);
     NSLog(@"%@",[sender title]);
+    
     if (flag){
         
         if([[sender title] isEqualToString:@""]) {
@@ -205,9 +209,12 @@
         bombs_amount--;
         [counter setIntValue:bombs_amount];
         [sender setTitle:@"X"];
+            if([self getMinsByIndex:[sender tag]]==1)
+                cleared--;
         }
         
         [sender setIntValue:1];
+        NSLog(@"Cleared= %i",cleared);
         
         if([self isEnd]) {
             [label setStringValue:@"Congrats!!!"];
