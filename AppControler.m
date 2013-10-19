@@ -243,8 +243,8 @@
         {
             bombs_amount++;
             [counter setIntValue:bombs_amount];
-            
         }
+        
         for (NSButton* mybutton in btn) {
             [mybutton setTitle:[NSString stringWithFormat:@"%i",[self getMinsByIndex:[mybutton tag]]]];
             [mybutton setEnabled:NO];
@@ -256,6 +256,7 @@
         }
         
         [sender setTitle:@"X"];
+        [sender setImage:[NSImage imageNamed:@"booomb.png"]];
         [label setStringValue:@"Game over"];
         
         NSLog(@"Game over");
