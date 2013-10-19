@@ -19,6 +19,7 @@
     IBOutlet NSTextField* counter;
     int bombs_amount;
     int cleared;
+    NSImage* flag_image;
 };
 
 

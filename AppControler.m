@@ -18,14 +18,16 @@
     [label setTextColor:[NSColor redColor]];
     [label setSelectable:YES];
 
-    int x = 180; //possition x
-    int y = 70; //possition y
+    int x = 160; //possition x
+    int y = 20; //possition y
     
-    int width = 20;
-    int height = 20;
+    int width = 25;
+    int height = 25;
     
     int dimentionx=9;
     int dimentiony=9;
+    
+    flag_image=[NSImage imageNamed:@"flag.png"];
     
     bombs_amount=0;
     cleared=0;
@@ -37,8 +39,16 @@
     for (int k=0; k<dimentionx; k++) {
         for(int j=0; j<dimentiony;j++){
          
-    NSButton *myButton = [[NSButton alloc] initWithFrame:NSMakeRect(x+k*19, y+j*17, width, height)];
+    NSButton *myButton = [[NSButton alloc] initWithFrame:NSMakeRect(x+k*24, y+j*23, width, height)];
     
+    //Scaling image to fit bounds:
+            
+    NSButtonCell *myButtonCell = [myButton cell];
+    [myButtonCell setImageScaling:NSImageScaleAxesIndependently];
+    
+    ////
+            
+            
     [myButton setTitle: @""];
     
     [myButton setButtonType:NSOnOffButton]; //Set what type button You want
@@ -46,7 +56,7 @@
 
     [[myButton cell] setControlSize:NSSmallControlSize];
 
-//            [myButton setTextColor:[CIColor ] forState: ];
+    //[myButton :[NSColor greenColor]];
             
     [myButton setTarget:self];
           
@@ -209,6 +219,10 @@
         bombs_amount--;
         [counter setIntValue:bombs_amount];
         [sender setTitle:@"X"];
+//            [sender setImage:[NSImage imageNamed:@"flag.png"]];
+            [sender setImage:flag_image];
+            [sender setImagePosition:NSImageOnly];
+
             if([self getMinsByIndex:[sender tag]]==1)
                 cleared--;
         }
@@ -218,7 +232,8 @@
         
         if([self isEnd]) {
             [label setStringValue:@"Congrats!!!"];
-            
+            for (NSButton* mybutton in btn) {
+            }
         }
     }
     else if ([self getMinsByIndex:[sender tag]]==1)
@@ -233,6 +248,10 @@
             [mybutton setTitle:[NSString stringWithFormat:@"%i",[self getMinsByIndex:[mybutton tag]]]];
             [mybutton setEnabled:NO];
             [mybutton setIntValue:1];
+            if([self getMinsByIndex:[mybutton tag]]>0){
+                [mybutton setImage:[NSImage imageNamed:@"bomb.png"]];
+                [mybutton setImagePosition:NSImageOnly];
+            }
         }
         
         [sender setTitle:@"X"];
@@ -246,6 +265,8 @@
         {
             bombs_amount++;
             [counter setIntValue:bombs_amount];
+            //[sender setImagePosition:[NSNoImage]];
+            [sender setImagePosition:NSNoImage];
             
         }
         [zeros addObject:[NSNumber numberWithInt:([sender tag])]];
