@@ -233,6 +233,7 @@
         if([self isEnd]) {
             [label setStringValue:@"Congrats!!!"];
             for (NSButton* mybutton in btn) {
+                [mybutton setEnabled:NO];
             }
         }
     }
@@ -274,7 +275,9 @@
         
         if([self isEnd]) {
             [label setStringValue:@"Congrats!!!"];
-            
+            for (NSButton* mybutton in btn) {
+                [mybutton setEnabled:NO];
+            }
         }
     }
     
